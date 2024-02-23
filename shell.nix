@@ -7,5 +7,6 @@
       criterion
       gdb
       gcovr
+      hexyl
     ];
 }
