@@ -5,7 +5,7 @@
 ** robot header
 */
 
-#include "robot-factory.h"
+#include "robot_factory.h"
 
 int robot_factory(int argc, char **argv)
 {

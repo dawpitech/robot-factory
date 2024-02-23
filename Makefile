@@ -31,7 +31,8 @@ T_BDIR	=	.buildTests
 NAME	=	asm
 T_NAME	=	unit_tests
 
-SRC = ./sources/robot-factory.c
+SRC = ./sources/robot_factory.c
+SRC	+=	./sources/op.c
 
 T_SRC	:=	$(SRC)
 

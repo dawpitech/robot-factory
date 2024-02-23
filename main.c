@@ -5,7 +5,7 @@
 ** main header
 */
 
-#include "robot-factory.h"
+#include "robot_factory.h"
 
 int main(int argc, char **argv)
 {
