@@ -18,6 +18,10 @@ typedef enum {
     NAME
 } raw_str_type_e;
 typedef struct {
+    char *argv;
+    int argc;
+} line_t;
+typedef struct {
     char *buffer;
     unsigned int buffer_size;
     FILE *output_file;
