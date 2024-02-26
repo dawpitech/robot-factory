@@ -16,11 +16,13 @@ int write_buff_to_output(assm_cfg_t *assm_cfg)
 {
     fwrite(assm_cfg->buffer, sizeof(char), assm_cfg->buffer_size,
         assm_cfg->output_file);
+    return RET_VALID;
 }
 
 int write_header_to_output(assm_cfg_t *assm_cfg)
 {
     fwrite(assm_cfg->header, sizeof(header_t), 1, assm_cfg->output_file);
+    return RET_VALID;
 }
 
 int write_byte(char byte, assm_cfg_t *assm_cfg)
