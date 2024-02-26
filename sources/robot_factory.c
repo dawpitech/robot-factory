@@ -16,7 +16,6 @@ static
 int initialize_assm(assm_cfg_t *assm_cfg)
 {
     assm_cfg->header = malloc(sizeof(header_t));
-
     if (assm_cfg->header == NULL)
         return RET_ERROR;
     assm_cfg->header->magic = htobe32(COREWAR_EXEC_MAGIC);

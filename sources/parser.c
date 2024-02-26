@@ -60,7 +60,6 @@ int parse_file(char *file_path, assm_cfg_t *assm_cfg)
     for (; getline(&line, &buff_value, stream) > 0;)
         if (line[0] != '\n' && line[0] != '\0')
             tokenize_line(line, assm_cfg);
-
     free(line);
     fclose(stream);
     return RET_VALID;
