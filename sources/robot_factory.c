@@ -5,6 +5,7 @@
 ** robot header
 */
 
+#include <endian.h>
 #include <malloc.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -18,7 +19,7 @@ int initialize_assm(assm_cfg_t *assm_cfg)
 
     if (assm_cfg->header == NULL)
         return RET_ERROR;
-    assm_cfg->header->magic = MAGIC_BYTES;
+    assm_cfg->header->magic = htobe32(COREWAR_EXEC_MAGIC);
     assm_cfg->header->prog_size = 0;
     assm_cfg->output_file = fopen("output.cor", "w");
     assm_cfg->buffer = NULL;

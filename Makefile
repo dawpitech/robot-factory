@@ -37,7 +37,6 @@ SRC	+=	./sources/op.c
 SRC	+=	./sources/writer/writer.c
 SRC	+=	./sources/utils/mem_toolbox.c
 SRC	+=	./sources/utils/str_toolbox.c
-SRC	+=	./sources/utils/hex_toolbox.c
 
 T_SRC	:=	$(SRC)
 
