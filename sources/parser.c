@@ -37,19 +37,20 @@ static
 void tokenize_line(char *input, assm_cfg_t *assm_cfg)
 {
     char *start_of_line = input;
+    char *command;
 
-    start_of_line = my_strdup(skip_label(start_of_line));
+    start_of_line = skip_label(start_of_line);
     printf("Start: %s", start_of_line);
     if (check_for_comment(start_of_line, assm_cfg) == RET_VALID)
         return;
+    command = my_strtok(start_of_line, ' ');
     for (int i = 0; op_tab[i].comment != 0; i += 1) {
-        if (my_strncmp(op_tab[i].mnemonique, start_of_line,
-                       my_strlen(op_tab[i].mnemonique)) == 0) {
+        if (my_strcmp(op_tab[i].mnemonique, command) == 0) {
             write_byte(op_tab[i].code, assm_cfg);
             printf("Found match with: %s\n", op_tab[i].mnemonique);
         }
     }
-    printf("End: %s", start_of_line);
+    printf("End: %s\n", start_of_line);
 }
 
 int parse_file(char *file_path, assm_cfg_t *assm_cfg)
