@@ -21,6 +21,7 @@ int write_buff_to_output(assm_cfg_t *assm_cfg)
 
 int write_header_to_output(assm_cfg_t *assm_cfg)
 {
+    assm_cfg->header->prog_size = htobe32((int) assm_cfg->buffer_size);
     fwrite(assm_cfg->header, sizeof(header_t), 1, assm_cfg->output_file);
     return RET_VALID;
 }
