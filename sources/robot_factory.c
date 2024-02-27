@@ -21,6 +21,10 @@ int initialize_assm(assm_cfg_t *assm_cfg)
     assm_cfg->header->magic = htobe32(COREWAR_EXEC_MAGIC);
     assm_cfg->header->prog_size = 0;
     assm_cfg->output_file = fopen("output.cor", "w");
+    if (assm_cfg->output_file == NULL) {
+        free(assm_cfg->header);
+        return RET_ERROR;
+    }
     assm_cfg->buffer = NULL;
     assm_cfg->buffer_size = 0;
     return RET_VALID;
