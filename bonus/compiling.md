@@ -5,7 +5,7 @@
 
 - The [opcode](#opcode)
 - For any instruction other than `live`, `zjmp`, `fork` and `lfork`, the [coding byte](#coding-byte)
-- The [parameters](#parameters)
+- The [parameters](#the-parameters)
 
 ## Opcode
 In `op.c` you can get the `char code` field, it will be the value of our opcode. For example, `sti` will be `0x0b`.
