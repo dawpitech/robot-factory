@@ -63,3 +63,6 @@ dkms.conf
 # Custom
 asm
 unit_tests
+*.log
+*.cor
+*.s
