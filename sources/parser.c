@@ -60,29 +60,24 @@ static
 int parse_args(char *input, op_t *op)
 {
     char *start_of_args = input + my_strlen(input) + 1;
-    int cb = 0;
     char *ptr = my_strtok(start_of_args, SEPARATOR_CHAR);
     int args = 0;
     arg_list_t *arguments = malloc(sizeof(arg_list_t));
     arg_list_t *curr_args = arguments;
 
-    if (arguments == NULL)
-        return RET_ERROR;
     while (ptr != NULL) {
+        if ((args > op->nbr_args) || curr_args == NULL)
+            return RET_ERROR;
         while (*ptr == '\t' || *ptr == ' ')
             ptr++;
-        my_memset(arguments, 0, sizeof(arg_list_t));
+        my_memset(curr_args, 0, sizeof(arg_list_t));
         if (*ptr != COMMENT_CHAR)
             classify_arg(curr_args, ptr, op, args);
         curr_args->data = my_strdup(input);
         curr_args->next = malloc(sizeof(arg_list_t));
-        if (curr_args->next == NULL)
-            return RET_ERROR;
         curr_args = curr_args->next;
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
         args++;
-        if (args > op->nbr_args)
-            return RET_ERROR;
     }
     return (args < op->nbr_args) ? RET_ERROR : RET_VALID;
 }
