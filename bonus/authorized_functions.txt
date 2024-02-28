@@ -14,3 +14,4 @@ getline
 malloc
 realloc
 free
+memset

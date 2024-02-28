@@ -63,7 +63,7 @@ int parse_args(char *input, op_t *op)
     int cb = 0;
     char *ptr = my_strtok(start_of_args, SEPARATOR_CHAR);
     int args = 0;
-    arg_list_t *arguments = malloc(sizeof(args_type_t));
+    arg_list_t *arguments = malloc(sizeof(arg_list_t));
     arg_list_t *curr_args = arguments;
 
     if (arguments == NULL)
@@ -71,11 +71,11 @@ int parse_args(char *input, op_t *op)
     while (ptr != NULL) {
         while (*ptr == '\t' || *ptr == ' ')
             ptr++;
-        my_memset(arguments, 0, sizeof(args_type_t));
+        my_memset(arguments, 0, sizeof(arg_list_t));
         if (*ptr != COMMENT_CHAR)
             classify_arg(curr_args, ptr, op, args);
         curr_args->data = my_strdup(input);
-        curr_args->next = malloc(sizeof(args_type_t));
+        curr_args->next = malloc(sizeof(arg_list_t));
         if (curr_args->next == NULL)
             return RET_ERROR;
         curr_args = curr_args->next;
