@@ -21,6 +21,17 @@ typedef struct {
     char *argv;
     int argc;
 } line_t;
+typedef enum {
+    DIRECT = 0b10,
+    INDIRECT = 0b11,
+    REGISTER = 0b01,
+    PADDING = 0b00
+} arg_type_e;
+typedef struct arg_list_s {
+    struct arg_list_s *next;
+    char *data;
+    arg_type_e type;
+} arg_list_t;
 typedef struct {
     char *buffer;
     unsigned int buffer_size;
