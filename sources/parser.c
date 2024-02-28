@@ -35,14 +35,14 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 }
 
 static
-int classify_arg(args_type_t *arguments, char *arg, op_t *op, int args)
+int classify_arg(arg_list_t *arguments, char *arg, op_t *op, int args)
 {
     int value = 0;
 
     if (arg[0] == 'r' && my_strlen(arg) >= 2) {
         value = my_getnbr(&arg[1]);
         if (value > MAX_ARGS_NUMBER || value < 0)
-            return 1;
+            return RET_ERROR;
         arguments->type = REGISTER;
     }
     if (arg[0] == DIRECT_CHAR && my_strlen(arg) >= 2) {
@@ -53,9 +53,7 @@ int classify_arg(args_type_t *arguments, char *arg, op_t *op, int args)
         value = my_getnbr(arg);
         arguments->type = INDIRECT;
     }
-    if (op->type[args] & arguments->type)
-        return 0;
-    return 1;
+    return !(op->type[args] & arguments->type);
 }
 
 static
@@ -69,7 +67,7 @@ int parse_args(char *input, op_t *op)
     arg_list_t *curr_args = arguments;
 
     if (arguments == NULL)
-        return 1;
+        return RET_ERROR;
     while (ptr != NULL) {
         while (*ptr == '\t' || *ptr == ' ')
             ptr++;
@@ -79,14 +77,14 @@ int parse_args(char *input, op_t *op)
         curr_args->data = my_strdup(input);
         curr_args->next = malloc(sizeof(args_type_t));
         if (curr_args->next == NULL)
-            return 1;
+            return RET_ERROR;
         curr_args = curr_args->next;
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
         args++;
         if (args > op->nbr_args)
-            return 1;
+            return RET_ERROR;
     }
-    return args < op->nbr_args;
+    return (args < op->nbr_args) ? RET_ERROR : RET_VALID;
 }
 
 static
