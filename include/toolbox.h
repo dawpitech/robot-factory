@@ -7,6 +7,7 @@
 
 #ifndef ROBOT_FACTORY_TOOLBOX_H
     #define ROBOT_FACTORY_TOOLBOX_H
+    #define NOT_NEG(x) ((x) < 0 ? 0 : (x))
 char *skip_label(char *ptr);
 void my_memcpy(void *dest, void *src, size_t size);
 char *my_strchr(char const *str, char token);
