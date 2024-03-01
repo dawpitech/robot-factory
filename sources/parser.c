@@ -57,6 +57,13 @@ int classify_arg(arg_list_t *arguments, char *arg, op_t *op, int args)
 }
 
 static
+void temporary_fix_for_cs(arg_list_t *curr_args, char *input)
+{
+    curr_args->data = my_strdup(input);
+    curr_args->next = malloc(sizeof(arg_list_t));
+}
+
+static
 int parse_args(char *input, op_t *op)
 {
     char *start_of_args = input + my_strlen(input) + 1;
@@ -73,8 +80,7 @@ int parse_args(char *input, op_t *op)
         my_memset(curr_args, 0, sizeof(arg_list_t));
         if (*ptr != COMMENT_CHAR)
             classify_arg(curr_args, ptr, op, args);
-        curr_args->data = my_strdup(input);
-        curr_args->next = malloc(sizeof(arg_list_t));
+        temporary_fix_for_cs(curr_args, input);
         curr_args = curr_args->next;
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
         args++;
