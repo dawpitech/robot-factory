@@ -23,14 +23,12 @@ bool is_file_right_type(char const *input_file_name)
 }
 
 static
-char *get_output_file_name(char *input_file_path)
+char *get_output_file_name(char *input_file_name)
 {
     char *rst;
-    char *input_file_name;
+    char const *original_ptr;
 
-    if (input_file_path == NULL)
-        return NULL;
-    input_file_name = my_strdup(input_file_path);
+    original_ptr = input_file_name;
     if (!is_file_right_type(input_file_name))
         return NULL;
     while (my_strchr(input_file_name, '/') != NULL)
@@ -42,7 +40,7 @@ char *get_output_file_name(char *input_file_path)
     rst = malloc(sizeof(char) * (my_strlen(input_file_name) + 5));
     my_strcpy(rst, input_file_name);
     my_strcat(rst, ".cor");
-    free(input_file_path);
+    free(original_ptr);
     return rst;
 }
 
@@ -76,6 +74,14 @@ int initialize_assm(assm_cfg_t *assm_cfg, char *input_file_name)
     return initialize_assm_header(assm_cfg);
 }
 
+static
+void exit_hook_assm(assm_cfg_t *assm_cfg)
+{
+    fclose(assm_cfg->output_file);
+    free(assm_cfg->header);
+    free(assm_cfg->buffer);
+}
+
 int robot_factory(int argc, char **argv)
 {
     assm_cfg_t assm_cfg = {0};
@@ -85,6 +91,6 @@ int robot_factory(int argc, char **argv)
     parse_file(argv[1], &assm_cfg);
     write_header_to_output(&assm_cfg);
     write_buff_to_output(&assm_cfg);
-    fclose(assm_cfg.output_file);
+    exit_hook_assm(&assm_cfg);
     return RET_VALID;
 }
