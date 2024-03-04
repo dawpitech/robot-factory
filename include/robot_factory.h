@@ -22,10 +22,10 @@ typedef struct {
     int argc;
 } line_t;
 typedef enum {
-    DIRECT = 0b10,
-    INDIRECT = 0b11,
-    REGISTER = 0b01,
-    PADDING = 0b00
+    DIRECT = 0x2,
+    INDIRECT = 0x3,
+    REGISTER = 0x1,
+    PADDING = 0x0
 } arg_type_e;
 typedef struct {
     char *data;

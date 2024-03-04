@@ -26,7 +26,7 @@ static
 char *get_output_file_name(char *input_file_name)
 {
     char *rst;
-    char const *original_ptr;
+    char *original_ptr;
 
     original_ptr = input_file_name;
     if (!is_file_right_type(input_file_name))
