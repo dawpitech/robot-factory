@@ -65,6 +65,5 @@ asm
 unit_tests
 *.log
 *.cor
-*.s
 compile_commands.json
 .cache/*
