@@ -16,6 +16,7 @@
     #define LABEL_CHAR ':'
     #define DIRECT_CHAR '%'
     #define SEPARATOR_CHAR ','
+    #define REGISTER_CHAR 'r'
     #define LABEL_CHARS "abcdefghijklmnopqrstuvwxyz_0123456789"
 
     #define NAME_CMD_STRING ".name"
