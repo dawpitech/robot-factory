@@ -35,74 +35,56 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 }
 
 static
-int classify_arg(arg_list_t *arguments, char *arg, op_t *op, int args)
+void classify_arg(arg_list_t *arg, char *raw_arg)
 {
-    int value = 0;
-
-    if (arg[0] == 'r' && my_strlen(arg) >= 2) {
-        value = my_getnbr(&arg[1]);
-        if (value > MAX_ARGS_NUMBER || value < 0)
-            return RET_ERROR;
-        arguments->type = REGISTER;
+    switch (raw_arg[0]) {
+        case REGISTER_CHAR:
+            arg->type = REGISTER;
+            break;
+        case DIRECT_CHAR:
+            arg->type = DIRECT;
+            break;
+        default:
+            arg->type = INDIRECT;
+            break;
     }
-    if (arg[0] == DIRECT_CHAR && my_strlen(arg) >= 2) {
-        value = my_getnbr(&arg[1]);
-        arguments->type = DIRECT;
-    }
-    if (my_strlen(arg) >= 2) {
-        value = my_getnbr(arg);
-        arguments->type = INDIRECT;
-    }
-    return !(op->type[args] & arguments->type);
+    arg->data = my_strdup(raw_arg);
 }
 
 static
-void temporary_fix_for_cs(arg_list_t *curr_args, char *input)
+int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
 {
-    curr_args->data = my_strdup(input);
-    curr_args->next = malloc(sizeof(arg_list_t));
-}
+    char *ptr = my_strtok(input + my_strlen(input) + 1, SEPARATOR_CHAR);
+    arg_list_t args[MAX_ARGS_NUMBER] = {0};
 
-static
-int parse_args(char *input, op_t *op)
-{
-    char *start_of_args = input + my_strlen(input) + 1;
-    char *ptr = my_strtok(start_of_args, SEPARATOR_CHAR);
-    int args = 0;
-    arg_list_t *arguments = malloc(sizeof(arg_list_t));
-    arg_list_t *curr_args = arguments;
-
-    while (ptr != NULL) {
-        if ((args > op->nbr_args) || curr_args == NULL)
-            return RET_ERROR;
-        while (*ptr == '\t' || *ptr == ' ')
+    for (int index = 0; index < MAX_ARGS_NUMBER; index += 1) {
+        while (ptr != NULL && (*ptr == ' ' || *ptr == '\t'))
             ptr++;
-        my_memset(curr_args, 0, sizeof(arg_list_t));
-        if (*ptr != COMMENT_CHAR)
-            classify_arg(curr_args, ptr, op, args);
-        temporary_fix_for_cs(curr_args, input);
-        curr_args = curr_args->next;
+        if (ptr == NULL) {
+            args[index].type = PADDING;
+            args[index].data = NULL;
+        } else {
+            classify_arg(&args[index], ptr);
+        }
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
-        args++;
     }
-    return (args < op->nbr_args) ? RET_ERROR : RET_VALID;
+    compile_line(op, args, assm_cfg);
+    return 0;
 }
 
 static
-void tokenize_line(char *input, assm_cfg_t *assm_cfg)
+int tokenize_line(char *input, assm_cfg_t *assm_cfg)
 {
     char *start_of_line = input;
     char *command;
-    int i = 0;
 
     start_of_line = skip_label(start_of_line);
     if (check_for_comment(start_of_line, assm_cfg) == RET_VALID)
-        return;
+        return RET_ERROR;
     command = my_strtok(start_of_line, ' ');
-    for (i = 0; op_tab[i].comment != 0; i += 1)
+    for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, command) == 0)
-            write_byte(op_tab[i].code, assm_cfg);
-    parse_args(start_of_line, &op_tab[i]);
+            return parse_line(start_of_line, &op_tab[i], assm_cfg);
 }
 
 int parse_file(char *file_path, assm_cfg_t *assm_cfg)

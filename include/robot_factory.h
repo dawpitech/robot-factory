@@ -27,8 +27,7 @@ typedef enum {
     REGISTER = 0b01,
     PADDING = 0b00
 } arg_type_e;
-typedef struct arg_list_s {
-    struct arg_list_s *next;
+typedef struct {
     char *data;
     arg_type_e type;
 } arg_list_t;
@@ -38,10 +37,12 @@ typedef struct {
     FILE *output_file;
     header_t *header;
 } assm_cfg_t;
+int compile_line(op_t *operation, arg_list_t *args, assm_cfg_t *assm_cfg);
 int robot_factory(int argc, char **argv);
 int parse_file(char *file_path, assm_cfg_t *assm_cfg);
 int write_byte(char byte, assm_cfg_t *assm_cfg);
 int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type);
 int write_buff_to_output(assm_cfg_t *assm_cfg);
 int write_header_to_output(assm_cfg_t *assm_cfg);
+void compute_coding_byte(arg_list_t *args, assm_cfg_t *assm_cfg);
 #endif //ROBOT_FACTORY_ROBOT_FACTORY_H
