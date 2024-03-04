@@ -47,7 +47,7 @@ void classify_arg(arg_list_t *arg, char *raw_arg)
             arg->type = INDIRECT;
             break;
     }
-    arg->data = my_strdup(raw_arg);
+    arg->data = raw_arg;
 }
 
 static
