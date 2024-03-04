@@ -13,8 +13,9 @@
 
 char *skip_label(char *ptr)
 {
-    while ((*ptr != '\t' && *ptr != ' ')
-        && *ptr != '\0')
+    if (ptr[0] == '.')
+        return ptr;
+    while ((*ptr != '\t' && *ptr != ' ') && *ptr != '\0')
         ptr++;
     while (*ptr == '\t' || *ptr == ' ')
         ptr++;
