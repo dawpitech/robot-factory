@@ -67,3 +67,4 @@ unit_tests
 *.cor
 compile_commands.json
 .cache/*
+vgcore.*

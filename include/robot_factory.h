@@ -45,4 +45,5 @@ int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type);
 int write_buff_to_output(assm_cfg_t *assm_cfg);
 int write_header_to_output(assm_cfg_t *assm_cfg);
 void compute_coding_byte(arg_list_t *args, assm_cfg_t *assm_cfg);
+int compute_arguments(arg_list_t *args, assm_cfg_t *assm_cfg);
 #endif //ROBOT_FACTORY_ROBOT_FACTORY_H
