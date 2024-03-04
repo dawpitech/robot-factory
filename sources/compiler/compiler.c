@@ -66,6 +66,5 @@ int compile_line(op_t *operation, arg_list_t *args, assm_cfg_t *assm_cfg)
         compute_coding_byte(args, assm_cfg);
     if (compute_arguments(args, assm_cfg))
         return RET_ERROR;
-    //write_byte(0xff, assm_cfg);
     return RET_VALID;
 }
