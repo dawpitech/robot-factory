@@ -88,7 +88,8 @@ int robot_factory(int argc, char **argv)
 
     if (argc != 2 || initialize_assm(&assm_cfg, argv[1]) == RET_ERROR)
         return RET_ERROR;
-    parse_file(argv[1], &assm_cfg);
+    if (parse_file(argv[1], &assm_cfg) == RET_ERROR)
+        return RET_ERROR;
     write_header_to_output(&assm_cfg);
     write_buff_to_output(&assm_cfg);
     exit_hook_assm(&assm_cfg);
