@@ -5,7 +5,6 @@
 ** parser header
 */
 
-#include <assert.h>
 #include <malloc.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -85,6 +84,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, command) == 0)
             return parse_line(start_of_line, &op_tab[i], assm_cfg);
+    return RET_VALID;
 }
 
 int parse_file(char *file_path, assm_cfg_t *assm_cfg)
