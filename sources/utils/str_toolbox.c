@@ -31,6 +31,15 @@ char *my_strchr(char const *str, char token)
     return *output == '\0' ? NULL : output;
 }
 
+void remove_commentaries(char *ptr)
+{
+    while (*ptr != '\0') {
+        if (*ptr == '#')
+            *ptr = '\0';
+        ptr++;
+    }
+}
+
 char *extract_from_quotes(char const *input)
 {
     char *start = my_strchr(input, '"');

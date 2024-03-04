@@ -78,6 +78,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     char *command;
 
     start_of_line = skip_label(start_of_line);
+    remove_commentaries(start_of_line);
     if (check_for_comment(start_of_line, assm_cfg) == RET_VALID)
         return RET_ERROR;
     command = my_strtok(start_of_line, ' ');
