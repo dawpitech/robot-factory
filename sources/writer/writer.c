@@ -36,7 +36,7 @@ int write_byte(char byte, assm_cfg_t *assm_cfg)
     assm_cfg->buffer = new_buff;
     assm_cfg->buffer_size += 1;
     assm_cfg->buffer[assm_cfg->buffer_size - 1] = byte;
-    return RET_ERROR;
+    return RET_VALID;
 }
 
 int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type)
