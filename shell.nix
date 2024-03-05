@@ -8,5 +8,6 @@
       gdb
       gcovr
       hexyl
+      imhex
     ];
 }
