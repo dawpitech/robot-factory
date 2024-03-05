@@ -11,12 +11,18 @@
 #include "toolbox.h"
 #include "my.h"
 
-char *skip_label(char *ptr)
+char *strip_label(char *ptr, char **label_str)
 {
-    if (ptr[0] == '.')
+    *label_str = NULL;
+    if (*ptr == '.')
         return ptr;
-    while ((*ptr != '\t' && *ptr != ' ') && *ptr != '\0')
+    if (*ptr != '\t' && *ptr != ' ') {
+        *label_str = ptr;
+        while (*ptr != '\t' && *ptr != ' ' && *ptr != '\0')
+            ptr++;
+        *ptr = '\0';
         ptr++;
+    }
     while (*ptr == '\t' || *ptr == ' ')
         ptr++;
     return ptr;

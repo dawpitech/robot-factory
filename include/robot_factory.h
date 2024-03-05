@@ -18,8 +18,8 @@ typedef enum {
     NAME
 } raw_str_type_e;
 typedef struct {
-    char *argv;
-    int argc;
+    char *command;
+    char *label;
 } line_t;
 typedef enum {
     DIRECT = 0x2,
@@ -36,6 +36,7 @@ typedef struct {
     unsigned int buffer_size;
     FILE *output_file;
     header_t *header;
+    line_t *line;
 } assm_cfg_t;
 int compile_line(op_t *operation, arg_t *args, assm_cfg_t *assm_cfg);
 int robot_factory(int argc, char **argv);

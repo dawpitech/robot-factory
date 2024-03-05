@@ -74,18 +74,15 @@ int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
 static
 int tokenize_line(char *input, assm_cfg_t *assm_cfg)
 {
-    char *start_of_line = input;
-    char *command;
-
-    start_of_line = skip_label(start_of_line);
-    remove_commentaries(start_of_line);
-    if (check_for_comment(start_of_line, assm_cfg) == RET_VALID)
+    assm_cfg->line->label = NULL;
+    assm_cfg->line->command = strip_label(input, &assm_cfg->line->label);
+    remove_commentaries(assm_cfg->line->command);
     if (check_for_comment(assm_cfg->line->command, assm_cfg) == RET_ERROR)
         return RET_ERROR;
-    command = my_strtok(start_of_line, ' ');
+    assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
     for (int i = 0; op_tab[i].comment != 0; i += 1)
-        if (my_strcmp(op_tab[i].mnemonique, command) == 0)
-            return parse_line(start_of_line, &op_tab[i], assm_cfg);
+        if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
+            return parse_line(assm_cfg->line->command, &op_tab[i], assm_cfg);
     return RET_VALID;
 }
 
@@ -94,8 +91,10 @@ int parse_file(char *file_path, assm_cfg_t *assm_cfg)
     FILE *stream;
     char *line = NULL;
     size_t buff_value = 0;
+    line_t line_buff = {0};
 
     stream = fopen(file_path, "r");
+    assm_cfg->line = &line_buff;
     if (stream == NULL)
         return RET_ERROR;
     for (; getline(&line, &buff_value, stream) > 0;)
