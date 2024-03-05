@@ -14,7 +14,7 @@
 
 void add_to_label(int address, char *label, label_t **node)
 {
-    label_t *new_node = NULL;
+    label_t *new_node = malloc(sizeof(label_t));
 
     while (*label == '%' || *label == ':')
         label++;
@@ -26,14 +26,8 @@ void add_to_label(int address, char *label, label_t **node)
     new_node = malloc(sizeof(label_t));
     new_node->name = my_strdup(label);
     new_node->address = address;
-    if ((*node)) {
-        new_node->next = *node;
-        (*node) = new_node;
-    }
-    if (*node == NULL)
-        (*node) = new_node;
-    (*node)->next = malloc(sizeof(label_t));
-    my_memset((*node)->next, 0, sizeof(label_t));
+    new_node->next = *node;
+    *node = new_node;
 }
 
 static
