@@ -40,6 +40,22 @@ int write_byte(char byte, assm_cfg_t *assm_cfg)
     return RET_VALID;
 }
 
+void write_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
+{
+    char extracted_byte = 0;
+
+    if (byte_nb == 2)
+        num = htobe16(num);
+    if (byte_nb == 4)
+        num = htobe32(num);
+    if (byte_nb < 1)
+        return;
+    for (int i = 0; i < byte_nb; i++) {
+        extracted_byte = (num >> (8 * i)) & 0xFF;
+        write_byte(extracted_byte, assm_cfg);
+    }
+}
+
 int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type)
 {
     char *target;

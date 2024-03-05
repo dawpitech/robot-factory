@@ -22,23 +22,6 @@ void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg)
     write_byte(coding_byte, assm_cfg);
 }
 
-static
-void get_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
-{
-    char extracted_byte = 0;
-
-    if (byte_nb == 2)
-        num = htobe16(num);
-    if (byte_nb == 4)
-        num = htobe32(num);
-    if (byte_nb < 1)
-        return;
-    for (int i = 0; i < byte_nb; i++) {
-        extracted_byte = (num >> (8 * i)) & 0xFF;
-        write_byte(extracted_byte, assm_cfg);
-    }
-}
-
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
 {
     int nb = 0;
@@ -47,13 +30,13 @@ int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
         nb = my_getnbr(args[i].data);
         switch ((int)args[i].type) {
         case DIRECT:
-            get_bytes(nb, idx ? IND_SIZE : DIR_SIZE, assm_cfg);
+            write_bytes(nb, idx ? IND_SIZE : DIR_SIZE, assm_cfg);
             break;
         case REGISTER:
-            get_bytes(nb, REG_SIZE, assm_cfg);
+            write_bytes(nb, 1, assm_cfg);
             break;
         case INDIRECT:
-            get_bytes(nb, IND_SIZE, assm_cfg);
+            write_bytes(nb, IND_SIZE, assm_cfg);
             break;
         default:
             return RET_ERROR;
