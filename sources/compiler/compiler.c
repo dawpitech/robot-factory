@@ -27,7 +27,10 @@ void get_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
 {
     char extracted_byte = 0;
 
-    num = byte_nb == 1 ? num : htobe32(num);
+    if (byte_nb == 2)
+        num = htobe16(num);
+    if (byte_nb == 4)
+        num = htobe32(num);
     if (byte_nb < 1)
         return;
     for (int i = 0; i < byte_nb; i++) {
