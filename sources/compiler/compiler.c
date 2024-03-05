@@ -45,7 +45,7 @@ int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
             write_bytes(nb, idx ? IND_SIZE : DIR_SIZE, assm_cfg);
             break;
         case REGISTER:
-            write_bytes(nb, REG_SIZE, assm_cfg);
+            write_bytes(nb, REG_PARAM_SIZE, assm_cfg);
             break;
         case INDIRECT:
             write_bytes(nb, IND_SIZE, assm_cfg);

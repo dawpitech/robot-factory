@@ -33,6 +33,8 @@
     * the address (1+pc) into r1 (4 bytes )) */
     #define T_LAB 8 /* LABEL */
 
+    #define REG_PARAM_SIZE 1
+
     /*
     ** size (in bytes)
     */
