@@ -30,20 +30,20 @@ typedef enum {
 typedef struct {
     char *data;
     arg_type_e type;
-} arg_list_t;
+} arg_t;
 typedef struct {
     char *buffer;
     unsigned int buffer_size;
     FILE *output_file;
     header_t *header;
 } assm_cfg_t;
-int compile_line(op_t *operation, arg_list_t *args, assm_cfg_t *assm_cfg);
+int compile_line(op_t *operation, arg_t *args, assm_cfg_t *assm_cfg);
 int robot_factory(int argc, char **argv);
 int parse_file(char *file_path, assm_cfg_t *assm_cfg);
 int write_byte(char byte, assm_cfg_t *assm_cfg);
 int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type);
 int write_buff_to_output(assm_cfg_t *assm_cfg);
 int write_header_to_output(assm_cfg_t *assm_cfg);
-void compute_coding_byte(arg_list_t *args, assm_cfg_t *assm_cfg);
-int compute_arguments(arg_list_t *args, assm_cfg_t *assm_cfg, int idx);
+void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg);
+int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx);
 #endif //ROBOT_FACTORY_ROBOT_FACTORY_H

@@ -34,7 +34,7 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 }
 
 static
-void classify_arg(arg_list_t *arg, char *raw_arg)
+void classify_arg(arg_t *arg, char *raw_arg)
 {
     switch (raw_arg[0]) {
         case REGISTER_CHAR:
@@ -54,7 +54,7 @@ static
 int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
 {
     char *ptr = my_strtok(input + my_strlen(input) + 1, SEPARATOR_CHAR);
-    arg_list_t args[MAX_ARGS_NUMBER] = {0};
+    arg_t args[MAX_ARGS_NUMBER] = {0};
 
     for (int index = 0; index < MAX_ARGS_NUMBER; index += 1) {
         while (ptr != NULL && (*ptr == ' ' || *ptr == '\t'))

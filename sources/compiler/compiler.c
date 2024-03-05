@@ -13,7 +13,7 @@
 #include "robot_factory.h"
 #include "my.h"
 
-void compute_coding_byte(arg_list_t *args, assm_cfg_t *assm_cfg)
+void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg)
 {
     u_int8_t coding_byte = 0;
 
@@ -36,7 +36,7 @@ void get_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
     }
 }
 
-int compute_arguments(arg_list_t *args, assm_cfg_t *assm_cfg, int idx)
+int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
 {
     int nb = 0;
 
@@ -59,7 +59,7 @@ int compute_arguments(arg_list_t *args, assm_cfg_t *assm_cfg, int idx)
     return RET_VALID;
 }
 
-int compile_line(op_t *operation, arg_list_t *args, assm_cfg_t *assm_cfg)
+int compile_line(op_t *operation, arg_t *args, assm_cfg_t *assm_cfg)
 {
     int can_be_index = (operation->code == 8 || operation->code == 9 ||
         operation->code == 10 || operation->code == 11 ||
