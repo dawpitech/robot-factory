@@ -7,6 +7,7 @@
 
 #include <malloc.h>
 #include <stddef.h>
+#include <sys/types.h>
 
 #include "robot_factory.h"
 #include "my.h"

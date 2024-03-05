@@ -32,7 +32,7 @@ void get_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
         return;
     for (int i = 0; i < byte_nb; i++) {
         extracted_byte = (num >> (8 * i)) & 0xFF;
-        write_byte(extracted_byte, assm_cfg);
+	write_byte(extracted_byte, assm_cfg);
     }
 }
 
