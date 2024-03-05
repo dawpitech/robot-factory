@@ -20,8 +20,7 @@ char *strip_label(char *ptr, char **label_str)
         *label_str = ptr;
         while (*ptr != '\t' && *ptr != ' ' && *ptr != '\0')
             ptr++;
-        *ptr = '\0';
-        ptr++;
+        ptr += *ptr != '\0';
     }
     while (*ptr == '\t' || *ptr == ' ')
         ptr++;

@@ -83,6 +83,8 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     if (check_for_comment(assm_cfg->line->command, assm_cfg) == RET_ERROR)
         return RET_ERROR;
     assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
+    if (assm_cfg->line->command == NULL)
+        return assm_cfg->line->label ? RET_VALID : RET_ERROR;
     for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
             return parse_line(assm_cfg->line->command, &op_tab[i], assm_cfg);
