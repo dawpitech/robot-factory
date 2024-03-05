@@ -28,9 +28,9 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
     }
     if (temp != NULL) {
         free(temp);
-        return RET_VALID;
+        return RET_ERROR;
     }
-    return RET_ERROR;
+    return RET_VALID;
 }
 
 static
@@ -80,6 +80,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     start_of_line = skip_label(start_of_line);
     remove_commentaries(start_of_line);
     if (check_for_comment(start_of_line, assm_cfg) == RET_VALID)
+    if (check_for_comment(assm_cfg->line->command, assm_cfg) == RET_ERROR)
         return RET_ERROR;
     command = my_strtok(start_of_line, ' ');
     for (int i = 0; op_tab[i].comment != 0; i += 1)
