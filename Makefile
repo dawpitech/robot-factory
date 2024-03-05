@@ -15,6 +15,7 @@ CFLAGS	+=	-Wshadow
 CFLAGS	+=	-Wunreachable-code
 CFLAGS	+=	-Wmissing-prototypes
 CFLAGS	+=	-Wno-unknown-pragmas
+CFLAGS	+=	-Wno-dangling-pointer
 CFLAGS	+=	-pedantic
 CFLAGS	+=	-I./include/
 
