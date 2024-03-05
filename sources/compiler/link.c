@@ -21,7 +21,10 @@ void add_to_label(int address, char *label, label_t **node)
     while (label[my_strlen(label) - 1] == ':' ||
         label[my_strlen(label) - 1] == '\n')
         label[my_strlen(label) - 1] = '\0';
+    if ((*node) && (*node)->next != NULL)
+        free((*node)->next);
     new_node = malloc(sizeof(label_t));
+    my_memset(new_node, 0, sizeof(label_t));
     new_node->name = my_strdup(label);
     new_node->address = address;
     if ((*node)) {
@@ -30,6 +33,8 @@ void add_to_label(int address, char *label, label_t **node)
     }
     if (*node == NULL)
         (*node) = new_node;
+    (*node)->next = malloc(sizeof(label_t));
+    my_memset((*node)->next, 0, sizeof(label_t));
 }
 
 static
@@ -56,7 +61,9 @@ void iterate_labels(assm_cfg_t *assm_cfg)
     unsigned int addr = 0;
     int size = assm_cfg->labels_tolink->is_idx ? IND_SIZE : DIR_SIZE;
 
-    while (assm_cfg->labels != NULL) {
+    while (assm_cfg->labels != NULL && assm_cfg->labels_tolink != NULL &&
+           assm_cfg->labels_tolink->name != NULL &&
+           assm_cfg->labels->name != NULL) {
         if (my_strcmp(assm_cfg->labels_tolink->name,
             assm_cfg->labels->name) == 0) {
             addr = assm_cfg->labels->address -
