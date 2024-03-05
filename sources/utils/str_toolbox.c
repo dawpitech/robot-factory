@@ -30,7 +30,7 @@ char *strip_label(char *ptr, char **label_str)
 
 char *my_strchr(char const *str, char token)
 {
-    char *output = str;
+    char *output = (char *)&(*str);
 
     while (*output != token && *output != '\0')
         output += 1;
