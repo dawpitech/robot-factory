@@ -31,10 +31,18 @@ typedef struct {
     char *data;
     arg_type_e type;
 } arg_t;
+typedef struct label_s {
+    char *name;
+    unsigned int address;
+    int is_idx;
+    struct label_s *next;
+} label_t;
 typedef struct {
     char *buffer;
     unsigned int buffer_size;
     FILE *output_file;
+    label_t *labels;
+    label_t *labels_tolink;
     header_t *header;
     line_t *line;
 } assm_cfg_t;
@@ -47,5 +55,7 @@ int write_to_header(char *str, assm_cfg_t *assm_cfg, raw_str_type_e type);
 int write_buff_to_output(assm_cfg_t *assm_cfg);
 int write_header_to_output(assm_cfg_t *assm_cfg);
 void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg);
+int link_labels(assm_cfg_t *assm_cfg);
+void add_to_label(int address, char *label, label_t **node);
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx);
 #endif //ROBOT_FACTORY_ROBOT_FACTORY_H

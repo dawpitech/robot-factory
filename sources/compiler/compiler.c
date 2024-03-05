@@ -5,6 +5,7 @@
 ** compiler header
 */
 
+#include <assert.h>
 #include <endian.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -22,18 +23,29 @@ void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg)
     write_byte(coding_byte, assm_cfg);
 }
 
+static
+int add_to_label_maybe(arg_t *args, assm_cfg_t *assm_cfg, int i, int idx)
+{
+    if (my_strstr(args[i].data, ":")) {
+        add_to_label(assm_cfg->buffer_size, args[i].data,
+            &assm_cfg->labels_tolink);
+        assm_cfg->labels_tolink->is_idx = idx;
+    }
+    return my_getnbr(args[i].data);
+}
+
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
 {
     int nb = 0;
 
     for (int i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
-        nb = my_getnbr(args[i].data);
+        nb = add_to_label_maybe(args, assm_cfg, i, idx);
         switch ((int)args[i].type) {
         case DIRECT:
             write_bytes(nb, idx ? IND_SIZE : DIR_SIZE, assm_cfg);
             break;
         case REGISTER:
-            write_bytes(nb, 1, assm_cfg);
+            write_bytes(nb, REG_SIZE, assm_cfg);
             break;
         case INDIRECT:
             write_bytes(nb, IND_SIZE, assm_cfg);

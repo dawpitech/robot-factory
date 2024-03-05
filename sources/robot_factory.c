@@ -77,6 +77,22 @@ int initialize_assm(assm_cfg_t *assm_cfg, char *input_file_name)
 static
 void exit_hook_assm(assm_cfg_t *assm_cfg)
 {
+    label_t *current = assm_cfg->labels;
+    label_t *next_node = NULL;
+
+    while (current != NULL) {
+        next_node = current->next;
+        free(current->name);
+        free(current);
+        current = next_node;
+    }
+    current = assm_cfg->labels_tolink;
+    while (current != NULL) {
+        next_node = current->next;
+        free(current->name);
+        free(current);
+        current = next_node;
+    }
     fclose(assm_cfg->output_file);
     free(assm_cfg->header);
     free(assm_cfg->buffer);
@@ -89,6 +105,8 @@ int robot_factory(int argc, char **argv)
     if (argc != 2 || initialize_assm(&assm_cfg, argv[1]) == RET_ERROR)
         return RET_ERROR;
     if (parse_file(argv[1], &assm_cfg) == RET_ERROR)
+        return RET_ERROR;
+    if (link_labels(&assm_cfg) == RET_ERROR)
         return RET_ERROR;
     write_header_to_output(&assm_cfg);
     write_buff_to_output(&assm_cfg);
