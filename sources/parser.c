@@ -75,8 +75,8 @@ static
 int tokenize_line(char *input, assm_cfg_t *assm_cfg)
 {
     assm_cfg->line->label = NULL;
+    remove_commentaries(input);
     assm_cfg->line->command = strip_label(input, &assm_cfg->line->label);
-    remove_commentaries(assm_cfg->line->command);
     if (check_for_comment(assm_cfg->line->command, assm_cfg) == RET_ERROR)
         return RET_ERROR;
     assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
