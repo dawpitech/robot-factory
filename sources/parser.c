@@ -52,15 +52,17 @@ int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
 static
 int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 {
-    if (assm_cfg->line->label)
-        return my_put_stderr("A label can't point to a .name/comment.\n");
     if (my_strncmp(input, NAME_CMD_STRING, my_strlen(NAME_CMD_STRING)) == 0) {
+        if (assm_cfg->line->label)
+            return my_put_stderr("A label can't point to a .name.\n");
         if (assm_cfg->line_nb == 0)
             return do_for_comment(input, assm_cfg, NAME);
         return my_put_stderr(".name must be the first line.\n");
     }
     if (my_strncmp(input, COMMENT_CMD_STRING,
         my_strlen(COMMENT_CMD_STRING)) == 0) {
+        if (assm_cfg->line->label)
+            return my_put_stderr("A label can't point to a .comment.\n");
         if (assm_cfg->line_nb == 1)
             return do_for_comment(input, assm_cfg, COMMENT);
         return my_put_stderr(".comment must be the second line.\n");
@@ -105,11 +107,21 @@ int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
     return compile_line(op, args, assm_cfg);
 }
 
+static int is_blank(char *ptr)
+{
+    if (ptr == NULL)
+        return 1;
+    while (*ptr == ' ' || *ptr == '\t' || *ptr == '\n')
+        ptr++;
+    return *ptr == '\0';
+}
+
 static int check_invalid_ins(assm_cfg_t *assm_cfg)
 {
     if (assm_cfg->line->command == NULL ||
         my_strcmp(assm_cfg->line->command, ".name") == 0 ||
-        my_strcmp(assm_cfg->line->command, ".comment") == 0)
+        my_strcmp(assm_cfg->line->command, ".comment") == 0 ||
+        is_blank(assm_cfg->line->command))
         return RET_VALID;
     for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
