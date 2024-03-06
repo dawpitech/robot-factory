@@ -99,8 +99,7 @@ int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
         }
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
     }
-    compile_line(op, args, assm_cfg);
-    return RET_VALID;
+    return compile_line(op, args, assm_cfg);
 }
 
 static

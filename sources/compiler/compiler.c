@@ -34,12 +34,22 @@ int add_to_label_maybe(arg_t *args, assm_cfg_t *assm_cfg, int i, int idx)
     return my_getnbr(args[i].data);
 }
 
+static
+int check_ins(int nb, arg_t arg, assm_cfg_t *assm_cfg)
+{
+    if ((nb < 1 || nb > REG_NUMBER) && arg.type == REGISTER)
+        return my_put_stderr("Invalid register number.\n");
+    return RET_VALID;
+}
+
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
 {
     int nb = 0;
 
     for (int i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
         nb = add_to_label_maybe(args, assm_cfg, i, idx);
+        if (check_ins(nb, args[i], assm_cfg) == RET_ERROR)
+            return RET_ERROR;
         switch ((int)args[i].type) {
         case DIRECT:
             write_bytes(nb, idx ? IND_SIZE : DIR_SIZE, assm_cfg);
@@ -50,8 +60,6 @@ int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx)
         case INDIRECT:
             write_bytes(nb, IND_SIZE, assm_cfg);
             break;
-        default:
-            return RET_ERROR;
         }
     }
     return RET_VALID;
