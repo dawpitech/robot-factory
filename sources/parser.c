@@ -13,6 +13,17 @@
 #include "my.h"
 #include "toolbox.h"
 
+static int check_temp(char *temp, assm_cfg_t *assm_cfg, raw_str_type_e type)
+{
+    if (temp[0] == '\0') {
+        free(temp);
+        return my_put_stderr("No name/comment specified.\n");
+    }
+    write_to_header(temp, assm_cfg, type);
+    free(temp);
+    return RET_VALID;
+}
+
 static
 int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
 {
@@ -30,8 +41,8 @@ int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
         ++comments;
     }
     temp = extract_from_quotes(input);
-    write_to_header(temp, assm_cfg, type);
-    free(temp);
+    if (check_temp(temp, assm_cfg, type) == RET_ERROR)
+        return RET_ERROR;
     if (names > 1 || comments > 1)
         return my_put_stderr("Name or comment defined more than once.\n");
     return RET_VALID;
