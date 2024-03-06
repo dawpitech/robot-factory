@@ -14,30 +14,36 @@
 #include "toolbox.h"
 
 static
-int check_for_comment(char *input, assm_cfg_t *assm_cfg)
+int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
 {
     char *temp = NULL;
     static int names = 0;
     static int comments = 0;
 
-    if (my_strncmp(input, ".name", 5) == 0) {
-        if (my_strlen(input) - 5 > 128)
-            return my_put_stderr("The program name is too long.\n");
-        temp = extract_from_quotes(input);
+    if (type == NAME) {
+        if (my_strlen(input) - my_strlen(NAME_CMD_STRING) > PROG_NAME_LENGTH)
+            return (int) my_put_stderr("The program name is too long.\n");
         ++names;
-        write_to_header(temp, assm_cfg, NAME);
-    }
-    if (my_strncmp(input, ".comment", 8) == 0) {
-        if (my_strlen(input) - 8 > 2048)
-            return my_put_stderr("The comment is too long.\n");
-        temp = extract_from_quotes(input);
+    } else {
+        if (my_strlen(input) - my_strlen(COMMENT_CMD_STRING) > COMMENT_LENGTH)
+            return (int) my_put_stderr("The comment is too long.\n");
         ++comments;
-        write_to_header(temp, assm_cfg, COMMENT);
     }
-    if (temp != NULL)
-        free(temp);
+    temp = extract_from_quotes(input);
+    write_to_header(temp, assm_cfg, type);
+    free(temp);
     if (names > 1 || comments > 1)
-        return my_put_stderr("Name or comment defined more than once.\n");
+        return (int) my_put_stderr("Name or comment defined more than once.\n");
+    return RET_VALID;
+}
+
+static
+int check_for_comment(char *input, assm_cfg_t *assm_cfg)
+{
+    if (my_strncmp(input, NAME_CMD_STRING, my_strlen(NAME_CMD_STRING)) == 0)
+        return do_for_comment(input, assm_cfg, NAME);
+    if (my_strncmp(input, COMMENT_CMD_STRING, my_strlen(COMMENT_CMD_STRING)) == 0)
+        return do_for_comment(input, assm_cfg, COMMENT);
     return RET_VALID;
 }
 
@@ -99,7 +105,8 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     return RET_VALID;
 }
 
-static int free_fclose_return(char *line, FILE *stream, int ret)
+static
+int free_fclose_return(char *line, FILE *stream, int ret)
 {
     free(line);
     fclose(stream);
