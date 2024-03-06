@@ -9,6 +9,7 @@
 #include <stddef.h>
 #include <stdio.h>
 
+#include "op.h"
 #include "robot_factory.h"
 #include "my.h"
 #include "toolbox.h"
@@ -102,6 +103,18 @@ int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
     return compile_line(op, args, assm_cfg);
 }
 
+static int check_invalid_ins(assm_cfg_t *assm_cfg)
+{
+    if (assm_cfg->line->command == NULL ||
+        my_strcmp(assm_cfg->line->command, ".name") == 0 ||
+        my_strcmp(assm_cfg->line->command, ".comment") == 0)
+        return RET_VALID;
+    for (int i = 0; op_tab[i].comment != 0; i += 1)
+        if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
+            return RET_VALID;
+    return my_put_stderr("Invalid instruction.\n");
+}
+
 static
 int tokenize_line(char *input, assm_cfg_t *assm_cfg)
 {
@@ -119,7 +132,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
             return parse_line(assm_cfg->line->command, &op_tab[i], assm_cfg);
-    return RET_VALID;
+    return check_invalid_ins(assm_cfg);
 }
 
 static
