@@ -49,7 +49,7 @@ void write_bytes_at(int num, int byte_nb, assm_cfg_t *assm_cfg,
 }
 
 static
-void iterate_labels(assm_cfg_t *assm_cfg)
+void iterate_labels(assm_cfg_t *assm_cfg, int *ret)
 {
     unsigned int addr = 0;
     int size = assm_cfg->labels_tolink->is_idx ? IND_SIZE : DIR_SIZE;
@@ -59,6 +59,7 @@ void iterate_labels(assm_cfg_t *assm_cfg)
         assm_cfg->labels->name != NULL) {
         if (my_strcmp(assm_cfg->labels_tolink->name,
             assm_cfg->labels->name) == 0) {
+            *ret = 1;
             addr = assm_cfg->labels->address -
                 assm_cfg->labels_tolink->address + 1;
             write_bytes_at(assm_cfg->labels->address >
@@ -74,11 +75,15 @@ void iterate_labels(assm_cfg_t *assm_cfg)
 int link_labels(assm_cfg_t *assm_cfg)
 {
     label_t *tmp = assm_cfg->labels;
+    int ret = 0;
 
     while (assm_cfg->labels_tolink != NULL) {
-        iterate_labels(assm_cfg);
+        iterate_labels(assm_cfg, &ret);
+        if (ret == 0)
+            return my_put_stderr("Undefined label.\n");
+        ret = 0;
         assm_cfg->labels = tmp;
         assm_cfg->labels_tolink = assm_cfg->labels_tolink->next;
     }
-    return 0;
+    return RET_VALID;
 }

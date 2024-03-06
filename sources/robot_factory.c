@@ -107,10 +107,13 @@ int robot_factory(int argc, char **argv)
     if (parse_file(argv[1], &assm_cfg) == RET_ERROR) {
         if (assm_cfg.line->label)
             free(assm_cfg.line->label);
+        exit_hook_assm(&assm_cfg);
         return RET_ERROR;
     }
-    if (link_labels(&assm_cfg) == RET_ERROR)
+    if (link_labels(&assm_cfg) == RET_ERROR) {
+        exit_hook_assm(&assm_cfg);
         return RET_ERROR;
+    }
     write_header_to_output(&assm_cfg);
     write_buff_to_output(&assm_cfg);
     exit_hook_assm(&assm_cfg);
