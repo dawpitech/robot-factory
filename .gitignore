@@ -68,3 +68,4 @@ unit_tests
 compile_commands.json
 .cache/*
 vgcore.*
+*.*~

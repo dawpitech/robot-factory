@@ -11,19 +11,35 @@
 #include "toolbox.h"
 #include "my.h"
 
+static
+char *delete_spaces(char *ptr)
+{
+    while (*ptr == ' ' || *ptr == '\t')
+        ptr++;
+    return ptr;
+}
+
 char *strip_label(char *ptr, char **label_str)
 {
-    *label_str = NULL;
-    if (*ptr == '.')
+    char *end = NULL;
+
+    ptr = delete_spaces(ptr);
+    if (*ptr == '\0') {
+        *label_str = NULL;
         return ptr;
-    if (*ptr != '\t' && *ptr != ' ') {
-        *label_str = ptr;
-        while (*ptr != '\t' && *ptr != ' ' && *ptr != '\0')
-            ptr++;
-        ptr += *ptr != '\0';
     }
-    while (*ptr == '\t' || *ptr == ' ')
-        ptr++;
+    end = ptr;
+    while (*end != '\0' && *end != ':' && *end != ' ' && *end != '\t')
+        end++;
+    if (*end == ':') {
+        *label_str = (char *)malloc((end - ptr + 1) * sizeof(char));
+        my_strncpy(*label_str, ptr, end - ptr);
+        (*label_str)[end - ptr] = '\0';
+        ptr = end + 1;
+        ptr = delete_spaces(ptr);
+    } else {
+        *label_str = NULL;
+    }
     return ptr;
 }
 
