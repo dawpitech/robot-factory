@@ -21,11 +21,15 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
     static int comments = 0;
 
     if (my_strncmp(input, ".name", 5) == 0) {
+        if (my_strlen(input) - 5 > 128)
+            return my_put_stderr("The program name is too long.\n");
         temp = extract_from_quotes(input);
         ++names;
         write_to_header(temp, assm_cfg, NAME);
     }
     if (my_strncmp(input, ".comment", 8) == 0) {
+        if (my_strlen(input) - 8 > 2048)
+            return my_put_stderr("The comment is too long.\n");
         temp = extract_from_quotes(input);
         ++comments;
         write_to_header(temp, assm_cfg, COMMENT);
