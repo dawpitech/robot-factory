@@ -33,7 +33,7 @@ int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
     write_to_header(temp, assm_cfg, type);
     free(temp);
     if (names > 1 || comments > 1)
-        return (int) my_put_stderr("Name or comment defined more than once.\n");
+        return my_put_stderr("Name or comment defined more than once.\n");
     return RET_VALID;
 }
 
@@ -42,7 +42,8 @@ int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 {
     if (my_strncmp(input, NAME_CMD_STRING, my_strlen(NAME_CMD_STRING)) == 0)
         return do_for_comment(input, assm_cfg, NAME);
-    if (my_strncmp(input, COMMENT_CMD_STRING, my_strlen(COMMENT_CMD_STRING)) == 0)
+    if (my_strncmp(input, COMMENT_CMD_STRING,
+        my_strlen(COMMENT_CMD_STRING)) == 0)
         return do_for_comment(input, assm_cfg, COMMENT);
     return RET_VALID;
 }
@@ -124,13 +125,12 @@ int parse_file(char *file_path, assm_cfg_t *assm_cfg)
     assm_cfg->line = &line_buff;
     if (stream == NULL)
         return RET_ERROR;
-    for (; getline(&line, &buff_value, stream) > 0;) {
+    for (assm_cfg->line_nb = 0;
+        getline(&line, &buff_value, stream) > 0; assm_cfg->line_nb++) {
         if (line[0] == '\n' || line[0] == '\0')
             continue;
         if (tokenize_line(line, assm_cfg) == RET_ERROR)
             return free_fclose_return(line, stream, RET_ERROR);
-        if (assm_cfg->line->label)
-            free(assm_cfg->line->label);
     }
     return free_fclose_return(line, stream, RET_VALID);
 }

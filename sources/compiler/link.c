@@ -15,6 +15,7 @@
 void add_to_label(int address, char *label, label_t **node)
 {
     label_t *new_node = NULL;
+    char *tmp = label;
 
     while (*label == '%' || *label == ':')
         label++;
@@ -28,6 +29,7 @@ void add_to_label(int address, char *label, label_t **node)
     new_node->address = address;
     new_node->next = *node;
     *node = new_node;
+    free(tmp);
 }
 
 static

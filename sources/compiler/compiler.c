@@ -27,7 +27,7 @@ static
 int add_to_label_maybe(arg_t *args, assm_cfg_t *assm_cfg, int i, int idx)
 {
     if (my_strstr(args[i].data, ":")) {
-        add_to_label(assm_cfg->buffer_size, args[i].data,
+        add_to_label(assm_cfg->buffer_size, my_strdup(args[i].data),
             &assm_cfg->labels_tolink);
         assm_cfg->labels_tolink->is_idx = idx;
     }

@@ -39,6 +39,7 @@ typedef struct label_s {
 } label_t;
 typedef struct {
     char *buffer;
+    int line_nb;
     unsigned int buffer_size;
     FILE *output_file;
     label_t *labels;

@@ -105,10 +105,12 @@ int robot_factory(int argc, char **argv)
     if (argc != 2 || initialize_assm(&assm_cfg, argv[1]) == RET_ERROR)
         return RET_ERROR;
     if (parse_file(argv[1], &assm_cfg) == RET_ERROR) {
-        if (assm_cfg.line->label)
-            free(assm_cfg.line->label);
         exit_hook_assm(&assm_cfg);
         return RET_ERROR;
+    }
+    if (assm_cfg.line_nb == 0) {
+        exit_hook_assm(&assm_cfg);
+        return my_put_stderr("The file is empty.\n");
     }
     if (link_labels(&assm_cfg) == RET_ERROR) {
         exit_hook_assm(&assm_cfg);
