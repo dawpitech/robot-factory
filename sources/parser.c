@@ -40,11 +40,17 @@ int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
 static
 int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 {
-    if (my_strncmp(input, NAME_CMD_STRING, my_strlen(NAME_CMD_STRING)) == 0)
-        return do_for_comment(input, assm_cfg, NAME);
+    if (my_strncmp(input, NAME_CMD_STRING, my_strlen(NAME_CMD_STRING)) == 0) {
+        if (assm_cfg->line_nb == 0)
+            return do_for_comment(input, assm_cfg, NAME);
+        return my_put_stderr(".name must be the first line.\n");
+    }
     if (my_strncmp(input, COMMENT_CMD_STRING,
-        my_strlen(COMMENT_CMD_STRING)) == 0)
-        return do_for_comment(input, assm_cfg, COMMENT);
+        my_strlen(COMMENT_CMD_STRING)) == 0) {
+        if (assm_cfg->line_nb == 1)
+            return do_for_comment(input, assm_cfg, COMMENT);
+        return my_put_stderr(".comment must be the second line.\n");
+    }
     return RET_VALID;
 }
 
