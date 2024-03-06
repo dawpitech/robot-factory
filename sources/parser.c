@@ -17,19 +17,23 @@ static
 int check_for_comment(char *input, assm_cfg_t *assm_cfg)
 {
     char *temp = NULL;
+    static int names = 0;
+    static int comments = 0;
 
     if (my_strncmp(input, ".name", 5) == 0) {
         temp = extract_from_quotes(input);
+        ++names;
         write_to_header(temp, assm_cfg, NAME);
     }
     if (my_strncmp(input, ".comment", 8) == 0) {
         temp = extract_from_quotes(input);
+        ++comments;
         write_to_header(temp, assm_cfg, COMMENT);
     }
-    if (temp != NULL) {
+    if (temp != NULL)
         free(temp);
-        return RET_ERROR;
-    }
+    if (names > 1 || comments > 1)
+        return my_put_stderr("Name or comment defined more than once.\n");
     return RET_VALID;
 }
 
@@ -68,7 +72,7 @@ int parse_line(char *input, op_t *op, assm_cfg_t *assm_cfg)
         ptr = my_strtok(NULL, SEPARATOR_CHAR);
     }
     compile_line(op, args, assm_cfg);
-    return 0;
+    return RET_VALID;
 }
 
 static
@@ -84,11 +88,18 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
         return RET_ERROR;
     assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
     if (assm_cfg->line->command == NULL)
-        return assm_cfg->line->label ? RET_VALID : RET_ERROR;
+        return RET_VALID;
     for (int i = 0; op_tab[i].comment != 0; i += 1)
         if (my_strcmp(op_tab[i].mnemonique, assm_cfg->line->command) == 0)
             return parse_line(assm_cfg->line->command, &op_tab[i], assm_cfg);
     return RET_VALID;
+}
+
+static int free_fclose_return(char *line, FILE *stream, int ret)
+{
+    free(line);
+    fclose(stream);
+    return ret;
 }
 
 int parse_file(char *file_path, assm_cfg_t *assm_cfg)
@@ -103,12 +114,12 @@ int parse_file(char *file_path, assm_cfg_t *assm_cfg)
     if (stream == NULL)
         return RET_ERROR;
     for (; getline(&line, &buff_value, stream) > 0;) {
-        if (line[0] != '\n' && line[0] != '\0')
-            tokenize_line(line, assm_cfg);
+        if (line[0] == '\n' || line[0] == '\0')
+            continue;
+        if (tokenize_line(line, assm_cfg) == RET_ERROR)
+            return free_fclose_return(line, stream, RET_ERROR);
         if (assm_cfg->line->label)
             free(assm_cfg->line->label);
     }
-    free(line);
-    fclose(stream);
-    return RET_VALID;
+    return free_fclose_return(line, stream, RET_VALID);
 }
