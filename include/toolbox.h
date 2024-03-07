@@ -14,4 +14,5 @@ char *my_strchr(char const *str, char token);
 void remove_commentaries(char *ptr);
 char *extract_from_quotes(char const *input);
 char *my_strtok(char *str, char separator);
+char *my_strtok_2(char *str, char *separator);
 #endif //ROBOT_FACTORY_TOOLBOX_H

@@ -20,7 +20,9 @@ void add_to_label(int address, char *label, label_t **node, int where)
     while (*label == '%' || *label == ':')
         label++;
     while (label[my_strlen(label) - 1] == ':' ||
-        label[my_strlen(label) - 1] == '\n')
+        label[my_strlen(label) - 1] == '\n' ||
+        label[my_strlen(label) - 1] == '\t' ||
+        label[my_strlen(label) - 1] == ' ')
         label[my_strlen(label) - 1] = '\0';
     new_node = malloc(sizeof(label_t));
     new_node->name = my_strdup(label);

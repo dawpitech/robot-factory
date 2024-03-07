@@ -140,7 +140,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
     if (assm_cfg->line->label)
         add_to_label(assm_cfg->buffer_size, assm_cfg->line->label,
             &assm_cfg->labels, assm_cfg->buffer_size);
-    assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
+    assm_cfg->line->command = my_strtok_2(assm_cfg->line->command, " \t");
     if (assm_cfg->line->command == NULL)
         return RET_VALID;
     for (int i = 0; op_tab[i].comment != 0; i += 1)
