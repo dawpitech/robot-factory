@@ -63,12 +63,7 @@ int initialize_assm(assm_cfg_t *assm_cfg, char *input_file_name)
     output_file_name = get_output_file_name(my_strdup(input_file_name));
     if (output_file_name == NULL)
         return RET_ERROR;
-    assm_cfg->output_file = fopen(output_file_name, "w");
-    free(output_file_name);
-    if (assm_cfg->output_file == NULL) {
-        free(assm_cfg->header);
-        return RET_ERROR;
-    }
+    assm_cfg->output_filename = output_file_name;
     assm_cfg->buffer = NULL;
     assm_cfg->buffer_size = 0;
     return initialize_assm_header(assm_cfg);
@@ -93,9 +88,31 @@ void exit_hook_assm(assm_cfg_t *assm_cfg)
         free(current);
         current = next_node;
     }
-    fclose(assm_cfg->output_file);
+    if (assm_cfg->output_filename)
+        free(assm_cfg->output_filename);
     free(assm_cfg->header);
     free(assm_cfg->buffer);
+}
+
+static
+int create_file(assm_cfg_t *assm_cfg)
+{
+    assm_cfg->output_file = fopen(assm_cfg->output_filename, "w");
+    if (assm_cfg->output_file == NULL) {
+        exit_hook_assm(assm_cfg);
+        return RET_ERROR;
+    }
+    return RET_VALID;
+}
+
+static
+int write_exit(assm_cfg_t *assm_cfg)
+{
+    write_header_to_output(assm_cfg);
+    write_buff_to_output(assm_cfg);
+    exit_hook_assm(assm_cfg);
+    fclose(assm_cfg->output_file);
+    return RET_VALID;
 }
 
 int robot_factory(int argc, char **argv)
@@ -116,8 +133,7 @@ int robot_factory(int argc, char **argv)
         exit_hook_assm(&assm_cfg);
         return RET_ERROR;
     }
-    write_header_to_output(&assm_cfg);
-    write_buff_to_output(&assm_cfg);
-    exit_hook_assm(&assm_cfg);
-    return RET_VALID;
+    if (create_file(&assm_cfg) == RET_ERROR)
+        return RET_ERROR;
+    return write_exit(&assm_cfg);
 }

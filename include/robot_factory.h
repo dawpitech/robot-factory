@@ -45,6 +45,7 @@ typedef struct {
     int line_nb;
     unsigned int buffer_size;
     FILE *output_file;
+    char *output_filename;
     label_t *labels;
     label_t *labels_tolink;
     header_t *header;
