@@ -14,10 +14,11 @@
 static
 int invalid_label(char c, char *str)
 {
-    for (int i = 0; str[i] != '\0'; i++)
-        if (c != str[i])
-            return 1;
-    return 0;
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (c == str[i])
+            return 0;
+    }
+    return 1;
 }
 
 static
@@ -49,7 +50,7 @@ int add_to_label(int address, char *label, label_t **node, int where)
     new_node->next = *node;
     *node = new_node;
     free(tmp);
-    return is_good_label(label);
+    return is_good_label((*node)->name);
 }
 
 static
