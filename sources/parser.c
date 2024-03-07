@@ -139,7 +139,7 @@ int tokenize_line(char *input, assm_cfg_t *assm_cfg)
         return RET_ERROR;
     if (assm_cfg->line->label)
         add_to_label(assm_cfg->buffer_size, assm_cfg->line->label,
-            &assm_cfg->labels);
+            &assm_cfg->labels, assm_cfg->buffer_size);
     assm_cfg->line->command = my_strtok(assm_cfg->line->command, ' ');
     if (assm_cfg->line->command == NULL)
         return RET_VALID;
