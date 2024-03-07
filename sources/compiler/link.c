@@ -92,11 +92,30 @@ void iterate_labels(assm_cfg_t *assm_cfg, int *ret)
     }
 }
 
+static int check_duplicates(label_t *labels)
+{
+    label_t *current = labels;
+    label_t *check_duplicate = NULL;
+    int ret = 0;
+
+    while (current != NULL) {
+        check_duplicate = current->next;
+        while (check_duplicate != NULL) {
+            ret += (my_strcmp(current->name, check_duplicate->name) == 0);
+            check_duplicate = check_duplicate->next;
+        }
+        current = current->next;
+    }
+    return ret ? RET_ERROR : RET_VALID;
+}
+
 int link_labels(assm_cfg_t *assm_cfg)
 {
     label_t *tmp = assm_cfg->labels;
     int ret = 0;
 
+    if (check_duplicates(assm_cfg->labels) == RET_ERROR)
+        return my_put_stderr("Multiple definition of the same label.\n");
     while (assm_cfg->labels_tolink != NULL) {
         iterate_labels(assm_cfg, &ret);
         if (ret == 0)
