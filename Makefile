@@ -42,6 +42,7 @@ SRC	+=	./sources/compiler/compiler.c
 SRC	+=	./sources/compiler/link.c
 
 T_SRC	:=	$(SRC)
+T_SRC	+=	./tests/tests_writer.c
 
 SRC	+=	./main.c
 
