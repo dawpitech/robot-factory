@@ -7,12 +7,30 @@
 
 #include "op.h"
 #include "robot_factory.h"
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "my.h"
 
-void add_to_label(int address, char *label, label_t **node, int where)
+static
+int invalid_label(char c, char *str)
+{
+    for (int i = 0; str[i] != '\0'; i++)
+        if (c != str[i])
+            return 1;
+    return 0;
+}
+
+static
+int is_good_label(char *label)
+{
+    for (int i = 0; label[i] != '\0'; i++) {
+        if (invalid_label(label[i], LABEL_CHARS))
+            return RET_ERROR;
+    }
+    return RET_VALID;
+}
+
+int add_to_label(int address, char *label, label_t **node, int where)
 {
     label_t *new_node = NULL;
     char *tmp = label;
@@ -31,6 +49,7 @@ void add_to_label(int address, char *label, label_t **node, int where)
     new_node->next = *node;
     *node = new_node;
     free(tmp);
+    return is_good_label(label);
 }
 
 static

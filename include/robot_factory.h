@@ -59,6 +59,6 @@ int write_buff_to_output(assm_cfg_t *assm_cfg);
 int write_header_to_output(assm_cfg_t *assm_cfg);
 void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg);
 int link_labels(assm_cfg_t *assm_cfg);
-void add_to_label(int address, char *label, label_t **node, int where);
+int add_to_label(int address, char *label, label_t **node, int where);
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr);
 #endif //ROBOT_FACTORY_ROBOT_FACTORY_H
