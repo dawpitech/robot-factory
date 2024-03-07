@@ -76,12 +76,15 @@ void classify_arg(arg_t *arg, char *raw_arg)
     switch (raw_arg[0]) {
         case REGISTER_CHAR:
             arg->type = REGISTER;
+            arg->type_e = T_REG;
             break;
         case DIRECT_CHAR:
             arg->type = DIRECT;
+            arg->type_e = T_DIR;
             break;
         default:
             arg->type = INDIRECT;
+            arg->type_e = T_IND;
             break;
     }
     arg->data = raw_arg;

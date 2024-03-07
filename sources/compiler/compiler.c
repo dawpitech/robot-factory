@@ -48,12 +48,14 @@ op_t *get_op(char *ins_)
 }
 
 static
-int check_ins(int nb, arg_t arg, assm_cfg_t *assm_cfg, int i)
+int check_ins(int nb, arg_t arg, int i)
 {
     op_t *op = get_op(NULL);
 
     if ((i + 1) > op->nbr_args)
         return my_put_stderr("Too many arguments.\n");
+    if (!(arg.type_e & op->type[i]))
+        return my_put_stderr("Invalid argument.\n");
     if ((nb < 1 || nb > REG_NUMBER) && arg.type == REGISTER)
         return my_put_stderr("Invalid register number.\n");
     return RET_VALID;
@@ -65,7 +67,7 @@ int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
 
     for (int i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
         nb = add_to_label_maybe(&args[i], assm_cfg, idx, addr);
-        if (check_ins(nb, args[i], assm_cfg, i) == RET_ERROR)
+        if (check_ins(nb, args[i], i) == RET_ERROR)
             return RET_ERROR;
         switch ((int)args[i].type) {
         case DIRECT:

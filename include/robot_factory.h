@@ -31,6 +31,7 @@ typedef enum {
 typedef struct {
     char *data;
     arg_type_e type;
+    args_type_t type_e;
 } arg_t;
 typedef struct label_s {
     char *name;
