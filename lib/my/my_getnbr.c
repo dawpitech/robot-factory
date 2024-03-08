@@ -32,7 +32,7 @@ void edit_sign(int *negative_flag, const char *character)
 }
 
 static
-int safe_return(int rest, int is_neg)
+long safe_return(long rest, int is_neg)
 {
     if (is_neg) {
         return rest;
@@ -48,7 +48,7 @@ int safe_return(int rest, int is_neg)
 }
 
 static
-int has_overflowed_checker(int rst)
+int has_overflowed_checker(long rst)
 {
     if (rst > 0) {
         return (1);
@@ -57,9 +57,9 @@ int has_overflowed_checker(int rst)
     }
 }
 
-int my_getnbr(char const *str)
+long my_getnbr(char const *str)
 {
-    int rst = 0;
+    long rst = 0;
     int is_negative = 0;
     int has_started = 0;
     int has_overflowed = 0;

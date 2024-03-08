@@ -24,7 +24,7 @@ char **my_str_to_word_array(char const *);
 int my_compute_power_rec(int, int);
 int my_compute_square_root(int);
 int my_find_prime_sup(int);
-int my_getnbr(char const *);
+long my_getnbr(char const *);
 int my_isneg(int);
 int my_is_prime(int);
 ssize_t my_putchar(char const c);

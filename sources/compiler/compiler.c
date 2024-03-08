@@ -24,7 +24,7 @@ void compute_coding_byte(arg_t *args, assm_cfg_t *assm_cfg)
 }
 
 static
-int add_to_label_maybe(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
+long add_to_label_maybe(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
 {
     if (my_strstr(args->data, ":")) {
         add_to_label(addr, my_strdup(args->data),
@@ -48,7 +48,7 @@ op_t *get_op(char *ins_)
 }
 
 static
-int check_ins(int nb, arg_t arg, int i)
+int check_ins(long nb, arg_t arg, int i)
 {
     op_t *op = get_op(NULL);
 
@@ -63,7 +63,7 @@ int check_ins(int nb, arg_t arg, int i)
 
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
 {
-    int nb = 0;
+    long nb = 0;
 
     for (int i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
         nb = add_to_label_maybe(&args[i], assm_cfg, idx, addr);

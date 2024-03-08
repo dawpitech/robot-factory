@@ -40,7 +40,7 @@ int write_byte(char byte, assm_cfg_t *assm_cfg)
     return RET_VALID;
 }
 
-void write_bytes(int num, int byte_nb, assm_cfg_t *assm_cfg)
+void write_bytes(long num, int byte_nb, assm_cfg_t *assm_cfg)
 {
     char extracted_byte = 0;
 
