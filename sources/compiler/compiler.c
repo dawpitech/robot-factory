@@ -52,8 +52,12 @@ int check_ins(long nb, arg_t arg, int i)
 {
     op_t *op = get_op(NULL);
 
-    if ((i + 1) > op->nbr_args)
-        return my_put_stderr("Too many arguments.\n");
+    if ((i < op->nbr_args) && nb == -133769420)
+        return my_put_stderr("Wrong number of arguments.\n");
+    if (nb == -133769420)
+        return RET_VALID;
+    if (((i + 1) > op->nbr_args))
+        return my_put_stderr("Wrong number of arguments.\n");
     if (!(arg.type_e & op->type[i]))
         return my_put_stderr("Invalid argument.\n");
     if ((nb < 1 || nb > REG_NUMBER) && arg.type == REGISTER)
@@ -64,8 +68,9 @@ int check_ins(long nb, arg_t arg, int i)
 int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
 {
     long nb = 0;
+    int i = 0;
 
-    for (int i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
+    for (i = 0; i < MAX_ARGS_NUMBER && args[i].data != NULL; i += 1) {
         nb = add_to_label_maybe(&args[i], assm_cfg, idx, addr);
         if (check_ins(nb, args[i], i) == RET_ERROR)
             return RET_ERROR;
@@ -81,7 +86,7 @@ int compute_arguments(arg_t *args, assm_cfg_t *assm_cfg, int idx, int addr)
             break;
         }
     }
-    return RET_VALID;
+    return check_ins(-133769420, args[0], i);
 }
 
 int compile_line(op_t *operation, arg_t *args, assm_cfg_t *assm_cfg)
