@@ -56,6 +56,8 @@ int check_ins(long nb, arg_t arg, int i)
         return my_put_stderr("Wrong number of arguments.\n");
     if (nb == -133769420)
         return RET_VALID;
+    if (my_strlen(arg.data) == 1 && arg.data[0] == DIRECT_CHAR)
+        return my_put_stderr("Invalid argument.\n");
     if (((i + 1) > op->nbr_args))
         return my_put_stderr("Wrong number of arguments.\n");
     if (!(arg.type_e & op->type[i]))
