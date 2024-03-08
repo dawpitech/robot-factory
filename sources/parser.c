@@ -14,11 +14,26 @@
 #include "my.h"
 #include "toolbox.h"
 
-static int check_temp(char *temp, assm_cfg_t *assm_cfg, raw_str_type_e type)
+static
+int check_temp(char *temp, assm_cfg_t *assm_cfg, raw_str_type_e type,
+    char *input)
 {
+    char *input_cp = my_strdup(input);
+    char *after_db_quotes = input_cp;
+
     if (temp == NULL) {
         free(temp);
         return my_put_stderr("No name/comment specified.\n");
+    }
+    for (int i = 2; i > 0;) {
+        if (*after_db_quotes == '\"')
+            i--;
+        after_db_quotes++;
+    }
+    if (*after_db_quotes != '\0' && *after_db_quotes != '\n') {
+        free(temp);
+        free(input_cp);
+        return my_put_stderr("Char(s) after name/comment.\n");
     }
     write_to_header(temp, assm_cfg, type);
     free(temp);
@@ -42,7 +57,7 @@ int do_for_comment(char *input, assm_cfg_t *assm_cfg, raw_str_type_e type)
         ++comments;
     }
     temp = extract_from_quotes(input);
-    if (check_temp(temp, assm_cfg, type) == RET_ERROR)
+    if (check_temp(temp, assm_cfg, type, input) == RET_ERROR)
         return RET_ERROR;
     if (names > 1 || comments > 1)
         return my_put_stderr("Name or comment defined more than once.\n");
